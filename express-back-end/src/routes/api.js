@@ -29,15 +29,14 @@ module.exports = () => {
         });
       });
 
-      
       if (sortBy) {
-        if (direction === 'asc') {
-          filteredArray.sort((a, b) => b[sortBy] < a[sortBy] ? 1 : -1)
-        } else {
+        if (direction === 'desc') {
           filteredArray.sort((a, b) => b[sortBy] > a[sortBy] ? 1 : -1)
+        } else {
+          filteredArray.sort((a, b) => b[sortBy] < a[sortBy] ? 1 : -1)
         }
       }
-      
+
       let newData = {
         posts: filteredArray,
       };
@@ -46,8 +45,21 @@ module.exports = () => {
       res.status(200).json(newData);
       })
     .catch(error => {
-      // res.status(400).json(error.response.data);
-      console.log('The error is: ', error);
+      const tagsError = {
+        error: 'Tags parameter is required',
+      };
+      const sortByError = {
+        error: 'sortBy or direction parameter is invalid'
+      };
+
+      if (!tags) {
+        return res.status(400).json(tagsError);
+      }
+
+      if (!sortBy || !direction) {
+        return res.status(400).json(sortByError);
+      }
+
     });
   });
 
