@@ -22,8 +22,13 @@ describe('Express-Back-End Test', () => {
 
       it('Will return 200 status code for correct route', () => {
         request('http://localhost:8001/api/posts/history,tech/likes/desc', (error, response, body) => {
-          console.log('RE!!', response)
          expect(response.statusCode).to.equal(200);
+        });
+      });
+
+      it('Will return 400 status code for not having tags parameter', () => {
+        request('http://localhost:8001/api/posts', (error, response, body) => {
+          expect(response.statusCode).to.equal(404);
         });
       });
 

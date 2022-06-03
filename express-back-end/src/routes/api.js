@@ -13,6 +13,21 @@ module.exports = () => {
     const { tags, sortBy, direction } = req.params;
     const tagsArray = tags.split(',');
 
+    const tagsError = {
+      error: 'Tags parameter is required!!!!',
+    };
+    const sortByError = {
+      error: 'sortBy or direction parameter is invalid'
+    };
+
+    if (!tags) {
+      return res.status(400).json(tagsError);
+    }
+
+    if (!sortBy || !direction) {
+      return res.status(400).json(sortByError);
+    }
+
     const route = tagsArray.map((tag, index) => {
       return axios.get(`https://api.hatchways.io/assessment/blog/posts?tag=${tag}&sortBy=${sortBy}&direction=${direction}`);
     });
@@ -37,10 +52,9 @@ module.exports = () => {
         }
       }
 
-      let newData = {
+      const newData = {
         posts: filteredArray,
       };
-
 
       res.status(200).json(newData);
       })
@@ -48,18 +62,8 @@ module.exports = () => {
       const tagsError = {
         error: 'Tags parameter is required',
       };
-      const sortByError = {
-        error: 'sortBy or direction parameter is invalid'
-      };
-
-      if (!tags) {
-        return res.status(400).json(tagsError);
-      }
-
-      if (!sortBy || !direction) {
-        return res.status(400).json(sortByError);
-      }
-
+      res.status(400).json(tagsError)
+      console.log(error);
     });
   });
 
